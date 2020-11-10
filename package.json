@@ -1,0 +1,27 @@
+{
+  "name": "nabeatsu-of-the-world",
+  "main": "gulpfile.js",
+  "scripts": {
+    "start": "wp-env start",
+    "update": "wp-env start --update",
+    "env": "wp-env",
+    "cli": "wp-env run cli wp"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kuno1/nabeatsu-of-the-world.git"
+  },
+  "keywords": [
+    "WordPress",
+    "SendGrid"
+  ],
+  "author": "Hametuha INC.",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/kuno1/nabeatsu-of-the-world/issues"
+  },
+  "homepage": "https://github.com/kuno1/nabeatsu-of-the-world#readme",
+  "devDependencies": {
+    "@wordpress/env": "^2.1.0"
+  }
+}
