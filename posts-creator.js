@@ -14,18 +14,34 @@
 		return ( '00' + number ).slice( -2 );
 	};
 
+	var messages = [];
 	var updateMessage = function( text ) {
-		$( '.nabeats-pre' ).html( text );
+		messages.push( text );
+		if ( 6 < messages.length ) {
+			messages.shift();
+		}
+		$( '.nabeats-pre' )
+			.html( messages.join( '<br />' ) )
+			.effect( 'highlight' );
 	};
+
+	var cronHit = 0;
+	var cronMessage = function() {
+		$( '.nabeatsu-pre-cron' )
+			.html( '<span>' + cronHit + '<small>(each 5 sec)</small></span>'  )
+			.effect( 'highlight' );
+	}
 
 	// Hit top page for cron runs.
 	setInterval( function() {
 		$.get( '/wp-cron.php' ).done( function () {
-			console.log( 'hit cron' );
-		} ).fail( function () {
-
+			cronHit++;
+			cronMessage();
+		} ).fail( function ( res ) {
+			console.error( 'Error: %o', res );
 		} );
 	}, 5000 );
+
 
 	// If button is clicked, Try to post minutely.
 	// 6 posts per minutes.
@@ -49,7 +65,6 @@
 				zeroPadding( later.getMinutes() ),
 				zeroPadding( later.getSeconds() )
 			);
-			console.log( ymd );
 			wp.apiFetch( {
 				path: 'wp/v2/posts',
 				method: 'post',
@@ -59,10 +74,11 @@
 					content: 'This post should be published at ' + later.toLocaleString(),
 					date: ymd,
 				}
-			} ).then( function() {
-				console.log( 'New post scheduled @ ' + later.toLocaleString() );
+			} ).then( function( response ) {
+				updateMessage( '<span>New post scheduled @ ' + later.toLocaleString() + '</span>' );
+				console.log( 'Posted: %o', response );
 			} ).catch( function( response ) {
-				console.log( response );
+				console.error( 'Error: %o', response );
 			} );
 		}, 10000 );
 	} );

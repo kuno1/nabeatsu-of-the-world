@@ -75,7 +75,7 @@ function _get_cron_lock() {
 
 	return $value;
 }
-//
+
 $crons = wp_get_ready_cron_jobs();
 if ( empty( $crons ) ) {
 	die();

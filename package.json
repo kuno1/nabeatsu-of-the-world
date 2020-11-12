@@ -12,10 +12,9 @@
     "url": "git+https://github.com/kuno1/nabeatsu-of-the-world.git"
   },
   "keywords": [
-    "WordPress",
-    "SendGrid"
+    "WordPress"
   ],
-  "author": "Hametuha INC.",
+  "author": "Kunoichi INC.",
   "license": "GPL-3.0",
   "bugs": {
     "url": "https://github.com/kuno1/nabeatsu-of-the-world/issues"
