@@ -68,6 +68,31 @@ Then, go to front page and you will find a single button and click it. WordPress
 
 Wating 10 minutes or mote, you can find many posts on your posts list. Some of are "Missed schedule".
 
+## How to Customize
+
+To make a new patch, you can replace customized `wp-cron.php` via WP-CLI command.
+
+```
+# Use wp-cron.php in your repo.
+# npm run cli is equivalent of wp defined in package.json
+npm run cli nabeatsu replace
+# Restore original wp-cron.php
+npm run cli nabeatsu restore
+# Check which version is loaded as wp-cron.php
+npm run cli nabeatsu current
+```
+
+After `wp nabeatsu replace`, you can edit `wp-cron.php` in this repo. Every change will be applied to your WordPress instance in docekr.
+
+There're 2 utility command for development.
+
+```
+# Erase all post data.
+npm run cli nabeatsu clean
+# Display stats of miss scheduled.
+npm run cli nabeatus stats
+```
+
 ## How to contribute
 
 Please feel free to send [Pull Requests](https://github.com/kuno1/nabeatsu-of-the-world/pulls) or make an [issue](https://github.com/kuno1/nabeatsu-of-the-world/issues).

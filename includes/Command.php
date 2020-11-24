@@ -14,7 +14,7 @@ if ( ! defined( 'WP_CLI' ) || ! WP_CLI ) {
  * @package notw
  */
 class Command extends \WP_CLI_Command {
-	
+
 	/**
 	 * Remove all posts.
 	 */
@@ -41,12 +41,36 @@ class Command extends \WP_CLI_Command {
 		\WP_CLI::line( '' );
 		\WP_CLI::success( sprintf( __( '%d / %d deleted.', 'notw' ), $deleted, $found ) );
 	}
-	
+
+	/**
+	 * Get missed schedules
+	 *
+	 */
+	public function stats() {
+		$query = new \WP_Query( [
+			'post_type'      => 'post',
+			'posts_per_page' => 1,
+			'post_status'    => 'future',
+			'date_query' => [
+				[
+					'before' => date_i18n( 'Y-m-d H:i:s' ),
+				],
+			],
+		] );
+		$found = $query->found_posts;
+		$message = sprintf( __( '%d posts are missed schedule.' ), number_format( $found ) );
+		if ( $found ) {
+			\WP_CLI::error( $message );
+		} else {
+			\WP_CLI::success( $message );
+		}
+	}
+
 	/**
 	 * Replace wp-cron.php
 	 */
 	public function replace() {
-		$new = plugin_dir_path( __DIR__ ) . 'wp-cron.php';
+		$new = plugin_dir_path( __DIR__ ) . 'wp-cron-loader.php';
 		$old = ABSPATH . 'wp-cron.php';
 		if ( md5_file( $new ) === md5_file( $old ) ) {
 			\WP_CLI::success( __( 'wp-cron.php is already replaced.', 'notw' ) );
@@ -58,7 +82,7 @@ class Command extends \WP_CLI_Command {
 			\WP_CLI::error( __( 'Failed to replace.', 'notw' ) );
 		}
 	}
-	
+
 	/**
 	 * Restore wp-cron.php to trunk.
 	 */
@@ -75,7 +99,7 @@ class Command extends \WP_CLI_Command {
 			\WP_CLI::error( __( 'Failed to restore original file.', 'notw' ) );
 		}
 	}
-	
+
 	/**
 	 * Display current status.
 	 */
@@ -85,7 +109,7 @@ class Command extends \WP_CLI_Command {
 		$table->setHeaders( [ 'Name', 'Path', 'MD5', 'Current' ] );
 		$valid = false;
 		foreach ( [
-			[ 'Customized', 'wp-cron.php' ],
+			[ 'Customized', 'wp-cron-loader.php' ],
 			[ 'Original', 'wp-cron.original.php' ],
 		] as list( $name, $path ) ) {
 			$md5        = md5_file( plugin_dir_path( __DIR__ ) . $path );
@@ -107,4 +131,4 @@ class Command extends \WP_CLI_Command {
 	}
 }
 
-WP_CLI::add_command( 'nabeatsu', \Kunoichi\Nabeats\Command::class );
+\WP_CLI::add_command( 'nabeatsu', \Kunoichi\Nabeats\Command::class );
