@@ -106,7 +106,6 @@ if ( empty( $doing_wp_cron ) ) {
  * must match $doing_wp_cron (the "key").
  */
 if ( $doing_cron_transient !== $doing_wp_cron ) {
-	nabeats_log( [ 'WP-CRON', 'CRON BATTING' ] );
 	return;
 }
 
